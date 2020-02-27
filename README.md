@@ -1,2 +1,4 @@
 # PetFinder
-Project 0 to initialize our collaboration.
+Solution to PetFinder Kaggle competition
+
+link to the competition: https://www.kaggle.com/c/petfinder-adoption-prediction
