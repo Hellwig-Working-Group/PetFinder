@@ -34,11 +34,11 @@ def kfold_lgb(datasets, target_col='AdoptionSpeed', params=PARAMS, seed=SEED):
     n_splits = 5
     n, _ = datasets['train'].shape
     m, _ = datasets['test'].shape
-    outputs_train = np.zeros((n))
+    outputs_train = np.zeros(n)
     outputs_test = np.zeros((m, n_splits))
 
     i = 0
-    kfold = StratifiedKFold(n_splits=n_splits, random_state=seed)
+    kfold = StratifiedKFold(n_splits=n_splits, random_state=seed, shuffle=True)
     for train_idx, val_idx in kfold.split(train_set, train_set[target_col].values):
 
         train_set_fold = train_set.iloc[train_idx, :]

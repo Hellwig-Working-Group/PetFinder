@@ -1,6 +1,5 @@
 """
 This module contains implementation of evaluation/loss function
-
 Based on: https://www.kaggle.com/aroraaman/quadratic-kappa-metric-explained-in-5-simple-steps
 """
 

@@ -6,7 +6,6 @@ from collections import defaultdict
 import json
 
 import pandas as pd
-from sklearn.model_selection import train_test_split
 
 from config.config import DATA_DIR
 
@@ -52,14 +51,6 @@ def get_dataset(dataset_type, data_dir=DATA_DIR):
 # todo: decide if we want to use raw image data
 def get_images():
     raise NotImplementedError
-
-
-# def create_train_and_test(df, target_col, test_size=0.3, seed=997):
-#     """Creates train/test split from dataframe"""
-#     assert target_col in df.columns, f"Wrong target col: {target_col}"
-#     y = df[target_col]
-#     x = df.drop(columns=[target_col])
-#     return train_test_split(x, y, test_size=test_size, random_state=seed)
 
 
 def remove_object_cols(df):

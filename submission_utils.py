@@ -8,48 +8,43 @@ import scipy as sp
 from evaluation_utils import sklearn_quadratic_kappa
 
 
-# todo: figure out what it does, I use it as black-box now
 class OptimizedRounder:
-    """Taken from: https://www.kaggle.com/wrosinski/baselinemodeling"""
+    """
+    Taken from:
+        - https://www.kaggle.com/wrosinski/baselinemodeling
+        - https://www.kaggle.com/c/petfinder-adoption-prediction/discussion/76107
+    """
     def __init__(self):
-        self.coef_ = 0
+        self._coefficients = None
 
-    def _kappa_loss(self, coef, X, y):
-        X_p = np.copy(X)
-        for i, pred in enumerate(X_p):
-            if pred < coef[0]:
-                X_p[i] = 0
-            elif coef[0] <= pred < coef[1]:
-                X_p[i] = 1
-            elif coef[1] <= pred < coef[2]:
-                X_p[i] = 2
-            elif coef[2] <= pred < coef[3]:
-                X_p[i] = 3
+    def fit(self, x, y):
+        """Learns coefficients using nelder-mead method"""
+        loss_partial = partial(self._kappa_loss, x=x, y=y)
+        # inital coeffs taken from the competition description
+        initial_coefficients = [0.5, 1.5, 2.5, 3.5]
+        self._coefficients = sp.optimize.minimize(loss_partial, initial_coefficients, method='nelder-mead')
+
+    def predict(self, x, coefficients):
+        """Rounds the input using learned coefficients"""
+        x_copy = np.copy(x)
+        for i, prediction in enumerate(x_copy):
+            if prediction < coefficients[0]:
+                x_copy[i] = 0
+            elif coefficients[0] <= prediction < coefficients[1]:
+                x_copy[i] = 1
+            elif coefficients[1] <= prediction < coefficients[2]:
+                x_copy[i] = 2
+            elif coefficients[2] <= prediction < coefficients[3]:
+                x_copy[i] = 3
             else:
-                X_p[i] = 4
+                x_copy[i] = 4
+        return x_copy
 
-        ll = sklearn_quadratic_kappa(y, X_p)
-        return -ll
-
-    def fit(self, X, y):
-        loss_partial = partial(self._kappa_loss, X=X, y=y)
-        initial_coef = [0.5, 1.5, 2.5, 3.5]
-        self.coef_ = sp.optimize.minimize(loss_partial, initial_coef, method='nelder-mead')
-
-    def predict(self, X, coef):
-        X_p = np.copy(X)
-        for i, pred in enumerate(X_p):
-            if pred < coef[0]:
-                X_p[i] = 0
-            elif coef[0] <= pred < coef[1]:
-                X_p[i] = 1
-            elif coef[1] <= pred < coef[2]:
-                X_p[i] = 2
-            elif coef[2] <= pred < coef[3]:
-                X_p[i] = 3
-            else:
-                X_p[i] = 4
-        return X_p
+    def _kappa_loss(self, coefficients, x, y):
+        """Quadratic Kappa loss function."""
+        x_copy = self.predict(x, coefficients)
+        return -1 * sklearn_quadratic_kappa(y, x_copy)
 
     def coefficients(self):
-        return self.coef_['x']
+        """Returns coefficients for optimal rounding for given input"""
+        return self._coefficients['x']
