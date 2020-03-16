@@ -14,7 +14,6 @@ from models import kfold_lgb
 from submission_utils import OptimizedRounder, generate_submission
 from evaluation_utils import sklearn_quadratic_kappa
 
-SEED = 997
 TARGET_COL = 'AdoptionSpeed'
 
 if __name__ == '__main__':
@@ -45,7 +44,7 @@ if __name__ == '__main__':
     print(f"\nTrain QWK: {qwk_train}")
 
     # print distributions of predictions vs. true distributions
-    print("\nTrue Distribution:")
+    print("\nTrue Distribution:")   
     print(pd.value_counts(y_train, normalize=True).sort_index())
     print("\nTrain Predicted Distribution:")
     print(pd.value_counts(rounded_train_outputs, normalize=True).sort_index())

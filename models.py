@@ -6,7 +6,7 @@ import lightgbm as lgb
 from sklearn.model_selection import StratifiedKFold
 import numpy as np
 
-SEED = 997
+from config.config import SEED
 
 PARAMS = {'application': 'regression',
           'boosting': 'gbdt',

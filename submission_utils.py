@@ -10,6 +10,7 @@ import scipy as sp
 
 from evaluation_utils import sklearn_quadratic_kappa
 
+
 class OptimizedRounder:
     """
     Taken from:
