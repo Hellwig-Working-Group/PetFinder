@@ -52,8 +52,3 @@ def get_dataset(dataset_type, data_dir=DATA_DIR):
 def get_images():
     raise NotImplementedError
 
-
-def remove_object_cols(df):
-    """Removes string columns from dataframe."""
-    object_cols = df.dtypes[df.dtypes == 'object'].index.values
-    return df.drop(columns=object_cols)

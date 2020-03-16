@@ -8,9 +8,10 @@ This is a regression approach explained here: https://www.kaggle.com/c/petfinder
 import pandas as pd
 import numpy as np
 
-from data_utils import get_dataset, remove_object_cols
+from data_utils import get_dataset
+from preprocessing import remove_object_cols
 from models import kfold_lgb
-from submission_utils import OptimizedRounder
+from submission_utils import OptimizedRounder, generate_submission
 from evaluation_utils import sklearn_quadratic_kappa
 
 SEED = 997
@@ -52,8 +53,4 @@ if __name__ == '__main__':
     print(pd.value_counts(rounded_test_outputs, normalize=True).sort_index())
 
     # generate submission
-    submission = pd.DataFrame(
-        {'PetID': datasets['test']['PetID'].values,
-         'AdoptionSpeed': rounded_test_outputs.astype(np.int32)})
-    submission.head()
-    submission.to_csv('submission.csv', index=False)
+    generate_submission(datasets['test']['PetID'].values, rounded_test_outputs.astype(np.int32))
