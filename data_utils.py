@@ -7,7 +7,7 @@ import json
 
 import pandas as pd
 
-from config.config import DATA_DIR
+from config.path_config import DATA_DIR
 
 
 def get_label_dataframes(data_dir=DATA_DIR):
@@ -51,3 +51,4 @@ def get_dataset(dataset_type, data_dir=DATA_DIR):
 # todo: decide if we want to use raw image data
 def get_images():
     raise NotImplementedError
+
