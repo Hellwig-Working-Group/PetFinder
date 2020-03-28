@@ -10,7 +10,7 @@ import numpy as np
 
 from data_utils import get_dataset
 from preprocessing import remove_object_cols
-from models import kfold_lgb
+from models import kfold_lgb, get_logistic
 from submission_utils import OptimizedRounder, generate_submission
 from evaluation_utils import sklearn_quadratic_kappa
 
@@ -26,9 +26,12 @@ if __name__ == '__main__':
     # extract training labels
     y_train = cleaned_datasets['train'][TARGET_COL]
 
+    print(cleaned_datasets)
+
     # step 2 - train a model and get it's outputs
     # get outputs from k-fold CV LGBM training
     outputs = kfold_lgb(cleaned_datasets)
+    outputs1 = get_logistic(cleaned_datasets)
 
     # step 3 - round the outputs, compute quadratic kappa and generate submission
     # initialize and train OptimizedRounder

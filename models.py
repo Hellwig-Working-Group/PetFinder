@@ -4,7 +4,10 @@ from collections import Counter
 
 import lightgbm as lgb
 from sklearn.model_selection import StratifiedKFold
+from sklearn.linear_model import LogisticRegression
 import numpy as np
+import pandas as pd
+
 
 from config.config import SEED
 
@@ -23,6 +26,8 @@ PARAMS = {'application': 'regression',
           'verbosity': -1,
           'data_random_seed': SEED}
 
+PARAMS_LR = {'random_state': SEED}
+
 
 def kfold_lgb(datasets, target_col='AdoptionSpeed', params=PARAMS, seed=SEED):
     """Runs K-Fold CV of LGBM models"""
@@ -40,7 +45,6 @@ def kfold_lgb(datasets, target_col='AdoptionSpeed', params=PARAMS, seed=SEED):
     i = 0
     kfold = StratifiedKFold(n_splits=n_splits, random_state=seed, shuffle=True)
     for train_idx, val_idx in kfold.split(train_set, train_set[target_col].values):
-
         train_set_fold = train_set.iloc[train_idx, :]
         val_set_fold = train_set.iloc[val_idx, :]
 
@@ -81,3 +85,21 @@ def train_lgb(x_train, x_val, y_train, y_val, params=PARAMS):
                       verbose_eval=verbose_eval,
                       early_stopping_rounds=early_stop)
     return model
+
+
+def get_logistic(datasets, target_col='AdoptionSpeed', params=PARAMS_LR):
+    """Train a baseline, SVM model"""
+
+    cols = [col for col in datasets['train'].columns if col not in [target_col]]
+
+    train_set = datasets['train'][cols]
+    x_test = datasets['test'][cols]
+
+    y_train = datasets['train'][target_col]
+
+    lr = LogisticRegression()
+    lr.set_params(**params)
+    lr.fit(X=pd.DataFrame(train_set), y=y_train)
+    train_pred = lr.predict(train_set)
+    test_pred = lr.predict(x_test)
+    return {'train': train_pred, 'test': test_pred}
