@@ -4,4 +4,4 @@ config/path_config.py
 # Ada:
 venv/
 .idea/
-config/__pycache__/
+__pycache__/
