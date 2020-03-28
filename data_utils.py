@@ -7,7 +7,7 @@ import json
 
 import pandas as pd
 
-from config.path_config import DATA_DIR
+from config.config import DATA_DIR
 
 
 def get_label_dataframes(data_dir=DATA_DIR):
