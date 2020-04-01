@@ -28,7 +28,8 @@ if __name__ == '__main__':
 
     # step 2 - train a model and get it's outputs
     # get outputs from k-fold CV LGBM training
-    outputs = kfold_lgb(cleaned_datasets)
+    outputs = {1: kfold_lgb(cleaned_datasets),
+               2: kfold_lgb(cleaned_datasets)}
 
     # step 3 - round the outputs, compute quadratic kappa and generate submission
     # initialize and train OptimizedRounder
