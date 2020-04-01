@@ -1,0 +1,7 @@
+# GitIgnore for all
+config/path_config.py
+
+# Ada:
+venv/
+.idea/
+__pycache__/

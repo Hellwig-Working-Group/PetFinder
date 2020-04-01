@@ -1,5 +1,5 @@
 """This model contains utils for creating submissions"""
-
+from datetime import datetime
 from functools import partial
 from os.path import isdir, join
 from os import makedirs, getcwd
@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import scipy as sp
 
+from config.path_config import SUBMISSION_DIR
 from evaluation_utils import sklearn_quadratic_kappa
 
 
@@ -53,7 +54,8 @@ class OptimizedRounder:
         return self._coefficients['x']
 
 
-def generate_submission(ids, labels, save_dir=None):
+def generate_submission(ids, labels, save_dir=SUBMISSION_DIR):
+    log_date = datetime.now().strftime("%b_%d_%H_%M")
     """Saves Kaggle submission csv file from predictions in specified directory."""
     # assign current working directory (CWD) if save_dir is not specified
     if not save_dir:
@@ -65,5 +67,5 @@ def generate_submission(ids, labels, save_dir=None):
     submission = pd.DataFrame(
         {'PetID': ids,
          'AdoptionSpeed': labels})
-    save_path = join(save_dir, 'submission.csv')
-    submission.to_csv(save_path, index=False)
+    submission.to_csv(join(save_dir, log_date + '_submission.csv'), index=False)
+    submission.to_csv(join(save_dir, 'submission.csv'), index=False)
