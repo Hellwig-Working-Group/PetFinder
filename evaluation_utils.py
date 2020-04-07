@@ -50,6 +50,11 @@ def quadratic_kappa(actuals, predictions, num_buckets=5):
 
     return 1 - (nominator / denominator)
 
+def compare_models_chisq(x, y):
+    cont_table = pd.crosstab(x, y, margins=False)
+    chi2, p, dof, ex = chi2_contingency(cont_table, correction=False)
+    return(p)
+
 
 if __name__ == '__main__':
     # simple test
