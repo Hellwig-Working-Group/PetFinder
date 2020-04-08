@@ -46,6 +46,9 @@ if __name__ == '__main__':
     qwk_train = sklearn_quadratic_kappa(y_train.values, rounded_train_outputs)
     print(f"\nTrain QWK: {qwk_train}")
 
+    # compare models using chi sq metrics
+    model_comparison = compare_models_chisq(rounded_test_outputs, np.around(outputs1['test']))
+
     # print distributions of predictions vs. true distributions
     print("\nTrue Distribution:")   
     print(pd.value_counts(y_train, normalize=True).sort_index())
